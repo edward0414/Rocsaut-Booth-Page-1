@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="header">
+    <nav>
+      <ul class="nav nav-pills pull-right">
+        <li role="presentation" ><a href="/">Home</a></li>
+        <li role="presentation"><a href="/login">Sign In</a></li>
+        <li role="presentation" class="active"><a href="/showSignUp">Sign Up</a></li>
+      </ul>
+    </nav>
+    <h3 class="text-muted">U of T ROCSAUT</h3>
+    </div>
+
+    <div class="jumbotron">
+    <h1>ROCSAUT Booth Member</h1>
+    <form class="form-signin">
+    <label for="inputfName" class="sr-only">First Name</label>
+    <input type="fname" name="inputfName" id="inputfName" class="form-control" placeholder="First Name" required autofocus>
+    <label for="inputlName" class="sr-only">Last Name</label>
+    <input type="lname" name="inputlName" id="inputlName" class="form-control" placeholder="Last Name" required autofocus>
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+
+    <button id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="button">Sign up</button>
+    </form>
+</div>
+ 
+       
+ 
+{% endblock %}
