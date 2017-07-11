@@ -4,33 +4,82 @@
 <div class="header">
     <nav>
         <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="/welcome">Home</a>
-            <li role="presentation"><a href="/logout">Log Out</a>
-            </li>
+            <li role="presentation" class="active"><a href="/welcome">Home</a></li>
+            <li role="presentation"><a href="/addTranscation">Add New Transcation</a></li>
+            <li role="presentation"><a href="/modifyTranscation">Modify Transcation</a></li>
+            <li role="presentation"><a href="/logout">Log Out</a></li>
         </ul>
     </nav>
-    <h3 class="text-muted">U of T ROCSAUT</h3>
+    <h3 class="text-muted">ROCSAUT Booth</h3>
 </div>
-{% if username %}
-<h4><strong>Welcome, {{ username }} </strong></h4>
+{% if user %}
+<h4><strong>Welcome, {{ user }} </strong></h4>
 {% endif %}
 
 <div class="jumbotron">
-    <h1>ROCSAUT Booth</h1>
+    <h1>ROCSAUT</h1>
     <p class="lead"></p>
+    <p><a class="btn btn-lg btn-success" href="/addTranscation" role="button">Add New Transcation</a>
+    </p>
+    <p><a class="btn btn-lg btn-success" href="/showSignUp" role="button">Modify Transcation</a>
+    </p>
 </div>
 
 <div class="row marketing">
     <div class="col-lg-6">
-        <h4>Order</h4>
-        <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-        <h4>Event</h4>
-        <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum. Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-        {% for post in posts %}
-        <strong>Title:</strong> {{ post.title}} <br>
-        <strong>Description:</strong> {{ post.description}} <br>
-        {% endfor %}
+        <h2>Members</h2>
+        <table class="pure-table pure-table-horizontal">
+         <thead>
+            <td>Member ID</td>
+            <td>Card Number</td>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Program</td>
+            <td>Email</td>
+            <td>Year</td>
+         </thead>
+         
+         {% for member in members %}
+            <tr>
+               <td>{{member["MemberID"]}}</td>
+                <td>{{member["CardNum"]}}</td>
+                <td>{{member["FirstName"]}}</td>
+               <td>{{member["LastName"]}}</td>
+               <td>{{member["Program"]}}</td>
+               <td>{{member["Email"]}}</td>
+               <td> {{member["Year"]}}</td>
+            </tr>
+         {% endfor %}
+      </table>
+        
+        <h2>Transcations</h2>
+        <table class="pure-table pure-table-horizontal">
+         <thead>
+            <td>TranscationID</td>
+            <td>Staff ID</td>
+            <td>Card Number</td>
+            <td>Member ID</td>
+            <td>Date</td>
+            <td>Description</td>
+            <td>Income</td>
+            <td>Expense</td>
+            <td>Balance</td>
+         </thead>
+         
+         {% for order in orders %}
+            <tr>
+               <td>{{order["TranscationID"]}}</td>
+                <td>{{order["StaffID"]}}</td>
+                <td>{{order["CardNum"]}}</td>
+                <td>{{order["MemberID"]}}</td>
+               <td>{{order["Date"]}}</td>
+               <td>{{order["Description"]}}</td>
+               <td>{{order["Income"]}}</td>
+               <td> {{order["Expense"]}}</td>
+               <td>{{order["Balance"]}}</td>	
+            </tr>
+         {% endfor %}
+      </table>
     </div>
 </div>
  

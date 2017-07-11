@@ -5,7 +5,10 @@ import sqlite3
 
 app = Flask(__name__)
 
-app.database = "sample.db"
+database = 'ROCSAUT.db'
+
+#Make username a global variable?
+#username = ""
 
 #login required decorator
 def login_required(f):
@@ -18,35 +21,166 @@ def login_required(f):
             return redirect(url_for('login'))
     return wrap
 
+
+
 @app.route('/')
 def home():
     return render_template('index.html')
 
+
+
 @app.route('/welcome')
 @login_required
 def welcome():
-    posts = []
+#Add username to this page somehow
+
     try:
-        g.db = connect_db()
-        cur = g.db.execute('select * from posts')
-        posts = [dict(title=row[0], description=row[1]) for row in cur.fetchall()]
+        g.db = sqlite3.connect(database)
+        g.db.row_factory = sqlite3.Row
+
+        #extract from tables Transcation and Member
+        cur = g.db.execute('select * from Transcation')
+        orders = cur.fetchall()
+        cur = g.db.execute('select * from Member')
+        members = cur.fetchall()
+
         g.db.close()
+
     except sqlite3.OperationalError:
         flash("You have no database")
-        
-    username = 'admin'
-    return render_template('welcome.html', username=username, posts=posts)
+
+    username = "admin"
+    return render_template('welcome.html', user=username, orders=orders, members=members)
+
+
+@app.route('/addTranscation', methods=['GET', 'POST'])
+def addTranscation():
+    error = None
+    if request.method == 'POST':
+        try:
+            staffID = request.form['staffID']
+            cardnum = request.form['cardnum']
+            memberID = request.form['memberID']
+            date = request.form['date']
+            description = request.form['description']
+            income = request.form['income']
+            expense = request.form['expense']
+
+            g.db = sqlite3.connect(database)
+
+            #auto update the balance
+            #extract the balance of the last entry
+            #gonna have problems when modifying the data?
+            cur = g.db.execute('SELECT Max(TranscationID), Balance FROM Transcation')
+            for row in cur.fetchall():
+                balance = row[1]
+            balance = int(balance) + int(income) - int(expense)
+
+            
+            cur = g.db.execute('INSERT INTO Transcation (StaffID,CardNum,MemberID,Date,Description,Income,Expense,Balance) VALUES (?,?,?,?,?,?,?,?)',(staffID,cardnum,memberID,date,description,income,expense,balance))
+            g.db.commit()
+            g.db.close()
+            error = "Record successfully added!"
+            return redirect(url_for('welcome'))
+
+        except sqlite3.OperationalError:
+            error = "Fail to insert new data"
+
+
+    return render_template('addTranscation.html', error=error)
+
+
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
+
+
+@app.route('/signupStaff', methods=['GET', 'POST'])
+def signupStaff():
+#Hash the password!!
+
+    error = None
+    if request.method == 'POST':
+        try:
+            memberID = request.form['memberID']
+            cardnum = request.form['cardnum']
+            username = request.form['username']
+            password = request.form['password']
+            position = request.form['position']
+
+            g.db = sqlite3.connect(database)
+            
+            cur = g.db.execute('INSERT INTO Staff (MemberID,CardNum,Username,Password,Position) VALUES (?,?,?,?,?)',(memberID,cardnum,username,password,position))
+            g.db.commit()
+            g.db.close()
+            error = "Sign up successfully!"
+            return redirect(url_for('login'))
+
+        except sqlite3.OperationalError:
+            error = "Fail to sign up."
+
+    return render_template('signupStaff.html', error=error)
+
+
+
+@app.route('/signupMember', methods=['GET', 'POST'])
+def signupMember():
+#Hash the password!!
+
+    error = None
+    if request.method == 'POST':
+        try:
+            cardnum = request.form['cardnum']
+            fname = request.form['fname']
+            lname = request.form['lname']
+            program = request.form['program']
+            email = request.form['email']
+            year = request.form['year']
+
+            g.db = sqlite3.connect(database)
+            
+            cur = g.db.execute('INSERT INTO Member (CardNum,FirstName,LastName,Program,Email,Year) VALUES (?,?,?,?,?,?)',(cardnum,fname,lname,program,email,year))
+            g.db.commit()
+            g.db.close()
+            error = "Sign up successfully!"
+
+        except sqlite3.OperationalError:
+            error = "Fail to sign up."
+
+    return render_template('signupMember.html', error=error)
+
+
 
 @app.route('/login', methods=['GET','POST'])
 def login():
+#Hash the password!!
+
     error = None
     if request.method == 'POST':
-        if request.form['password'] == 'password' and request.form['username'] == 'admin':
-            session['logged_in'] = True
-            return redirect(url_for('welcome'))
-        else:
-            error = 'Invalid credentials. Please try again.'
+        try:
+            username = request.form['username']
+
+            #extract the password from the database
+            g.db = sqlite3.connect(database)
+            cur = g.db.execute("SELECT Password FROM Staff WHERE Username='{}'".format(username))
+            for row in cur.fetchall():
+                password = row[0]
+            g.db.close()
+
+            #check password
+            if request.form['password'] == password:
+                session['logged_in'] = True
+                return redirect(url_for('welcome'))
+            else:
+                error = 'Invalid credentials. Please try again.'
+
+        except sqlite3.OperationalError:
+            error = "Fail to log in."
+
     return render_template('login.html', error=error)
+
+
+
 
 @app.route('/logout')
 def logout():
@@ -54,20 +188,7 @@ def logout():
     flash('You have just logged out')
     return redirect(url_for('home'))
 
-@app.route('/showSignUp')
-def showSignUp():
-    return render_template('signup.html')
 
-@app.route('/signup', methods=['POST'])
-def signup():
-    fname = request.form['inputfName']
-    lname = request.form['inputlName']
-    email = request.form['inputEmail']
-    password = request.form['inputPassword']
-
-
-def connect_db():
-    return sqlite3.connect(app.database)
 
 
 if __name__ == "__main__":
