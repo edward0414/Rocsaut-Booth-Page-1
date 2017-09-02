@@ -1,11 +1,20 @@
-from flask import Flask, flash, redirect, render_template, request, g, session, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from functools import wraps
 import os
-import sqlite3
+from flaskext.mysql import MySQL
 
 app = Flask(__name__)
 
-database = 'ROCSAUT.db'
+
+mysql = MySQL()
+ 
+# MySQL configurations
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = '7782941578q'
+app.config['MYSQL_DATABASE_DB'] = 'Order'
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+mysql.init_app(app)
+
 
 #Make username a global variable?
 #username = ""
@@ -54,6 +63,7 @@ def welcome():
 
 
 @app.route('/addTranscation', methods=['GET', 'POST'])
+@login_required
 def addTranscation():
     error = None
     if request.method == 'POST':
@@ -89,10 +99,70 @@ def addTranscation():
 
     return render_template('addTranscation.html', error=error)
 
-
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
+
+
+@app.route('/signupMember', methods=['GET', 'POST'])
+def signupMember():
+#Hash the password!!
+
+    error = None
+    if request.method == 'POST':
+        try:
+            campus = request.form['campus']
+            cardnum = request.form['cardNum']
+            stunum = request.form['stuNum']
+            fname = request.form['fName']
+            lname = request.form['lName']
+            cname = request.form['cName']
+            if (cname == ""):
+                cname = 'NULL'
+            gender = request.form['gender']
+            byear = request.form['bYear']
+            bmonth = request.form['bMonth']
+            bdate = request.form['bDate']
+            email = request.form['email']
+            phone = request.form['phone']
+            program = request.form['program']
+            oprogram = request.form['oProgram']
+            if oprogram:
+                program = oprogram
+            year = request.form['year']
+
+            print('a')
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            print('b')
+
+            # figure out the database in MySQL and insert to it
+            # (cardNum,stuNum,fName,lName,cName,phone,email,gender,birth,campus,year,program,7xNuLL)
+            query = "INSERT INTO member VALUES ({0},'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}',{12},'{13}', {14}, {15}, {16}, {17}, {18}, {19}, {20});".format(cardnum,stunum,fname,lname,cname,phone,email,gender,byear,bmonth,bdate,campus,year,program,'NULL','NULL','NULL','NULL','NULL','NULL','NULL')
+            # query = "INSERT INTO member VALUES (998, NULL, 'Eric', 'Feng', 'NULL', '647-996-2797', 'ericyfeng@hotmail.com', 'M', NULL, NULL, NULL, 'UTSG', 4, 'Comp Sci', NULL, NULL, NULL, NULL, NULL, NULL, NULL);"
+            print(query)
+            # print("INSERT INTO member VALUES (997, NULL, 'Eric', 'Feng', NULL, '647-996-2797', 'ericyfeng@hotmail.com', 'M', NULL, NULL, NULL, 'UTSG', 4, 'Comp Sci', NULL, NULL, NULL, NULL, NULL, NULL, NULL);")
+            print('c')
+            cursor.execute(query)
+            print('d')
+            # data = cursor.fecthone()
+            # print(data)
+            # print('e')
+
+            #prevent user from submitting duplicate data?
+
+            conn.commit()
+            conn.close()
+            print('f')
+            error = "Sign up successfully!"
+
+        except:
+            conn.rollback()
+            print('fail')
+            error = "Fail to sign up."
+
+    return render_template('signupMember.html', error=error)
+
 
 
 @app.route('/signupStaff', methods=['GET', 'POST'])
@@ -120,34 +190,6 @@ def signupStaff():
             error = "Fail to sign up."
 
     return render_template('signupStaff.html', error=error)
-
-
-
-@app.route('/signupMember', methods=['GET', 'POST'])
-def signupMember():
-#Hash the password!!
-
-    error = None
-    if request.method == 'POST':
-        try:
-            cardnum = request.form['cardnum']
-            fname = request.form['fname']
-            lname = request.form['lname']
-            program = request.form['program']
-            email = request.form['email']
-            year = request.form['year']
-
-            g.db = sqlite3.connect(database)
-            
-            cur = g.db.execute('INSERT INTO Member (CardNum,FirstName,LastName,Program,Email,Year) VALUES (?,?,?,?,?,?)',(cardnum,fname,lname,program,email,year))
-            g.db.commit()
-            g.db.close()
-            error = "Sign up successfully!"
-
-        except sqlite3.OperationalError:
-            error = "Fail to sign up."
-
-    return render_template('signupMember.html', error=error)
 
 
 

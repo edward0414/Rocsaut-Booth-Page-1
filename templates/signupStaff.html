@@ -17,13 +17,11 @@
     {% endif %}
 
     <div class="jumbotron">
-    <h1>ROCSAUT Staff</h1>
+    <h1>ROCSAUT Staff Sign Up</h1>
     <form class="form-signin" action="" method="post">
-        <input type="integer" placeholder="Member ID" name="memberID" class="form-control"  value="{{request.form.memberID }}" required autofocus>
-        <input type="integer" placeholder="Card Number" name="cardnum" class="form-control"  value="{{request.form.cardnum }}" required autofocus>
-        <input type="text" placeholder="Username" name="username" class="form-control"  value="{{request.form.username }}" required autofocus>
-        <input type="text" placeholder="Password" name="password" class="form-control"  value="{{request.form.password }}" required autofocus>
-        <input type="text" placeholder="Position" name="position" class="form-control"  value="{{request.form.position }}" required autofocus>
+        <input type="integer" placeholder="Member Card Number" name="cardnum" class="form-control" required autofocus>
+        <input type="text" placeholder="Position" name="position" class="form-control" required>
+        <input type="text" placeholder="Password" name="password" class="form-control" required>
         <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">
     </form>
 </div>

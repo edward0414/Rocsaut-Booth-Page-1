@@ -1,34 +1,199 @@
-{% extends "base.html" %}
-{% block content %}
-
-<div class="header">
-    <nav>
-      <ul class="nav nav-pills pull-right">
-        <li role="presentation" ><a href="/">Home</a></li>
-        <li role="presentation"><a href="/login">Log In</a></li>
-        <li role="presentation" class="active"><a href="/signup">Sign Up</a></li>
-      </ul>
-    </nav>
-    <h3 class="text-muted">ROCSAUT Booth</h3>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>ROCSAUT Booth Website</title>
+ 
+ 
+    <link href="https://getbootstrap.com/docs/3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
+    <link href="{{ url_for('static', filename = 'jumbotron-narrow.css') }}" rel="stylesheet">
     
-    {% if error %}
-        <p class="error"><strong>Error:</strong> {{ error }}</p>
-    {% endif %}
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+ 
+    <style>
+        .form-one-line {
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+ 
+</head>
+ 
+<body>
+ 
+    <div class="container">
 
-    <div class="jumbotron">
-    <h1>ROCSAUT Member</h1>
-    <form class="form-signin" action="" method="post">
-        <input type="integer" placeholder="Card Number" name="cardnum" class="form-control"  value="{{request.form.cardnum }}" required autofocus>
-        <input type="text" placeholder="First Name" name="fname" class="form-control"  value="{{request.form.fname }}" required autofocus>
-        <input type="text" placeholder="Last Name" name="lname" class="form-control"  value="{{request.form.lname }}" required autofocus>
-        <input type="text" placeholder="Program" name="program" class="form-control"  value="{{request.form.program }}" required autofocus>
-        <input type="text" placeholder="Email" name="email" class="form-control"  value="{{request.form.email }}" required autofocus>
-        <input type="integer" placeholder="Year" name="year" class="form-control"  value="{{request.form.year }}" required autofocus>
-        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">
-    </form>
-</div>
+        <div class="header">
+            <nav>
+              <ul class="nav nav-pills pull-right">
+                <li role="presentation" ><a href="/">Home</a></li>
+                <li role="presentation"><a href="/login">Log In</a></li>
+                <li role="presentation" class="active"><a href="/signup">Sign Up</a></li>
+              </ul>
+            </nav>
+            <h3 class="text-muted">ROCSAUT Booth</h3>
+            </div>
+
+            {% if error %}
+                <p class="error"><strong>Error:</strong> {{ error }}</p>
+            {% endif %}
+
+            <div class="jumbotron">
+            <h1>ROCSAUT Member Sign Up</h1>
+            <form class="form-signin" action="" method="post">
+                <select class="form-control" name="campus" required>
+                    <option disabled selected hidden>-- Select Campus --</option>
+                    <option>St. George</option>
+                    <option>Scarborough</option>
+                    <option>Mississaugua</option>
+                </select>
+                <input type="number" placeholder="Member Card Number" name="cardNum" class="form-control" required autofocus>
+                <input type="number" placeholder="Student Number" name="stuNum" class="form-control" required>
+                <input type="text" placeholder="First Name" name="fName" class="form-control" required>
+                <input type="text" placeholder="Last Name" name="lName" class="form-control"required>
+                <input type="text" placeholder="Chinese Name (Optional)" name="cName" class="form-control" optional>
+                <select class="form-control" name="gender" required>
+                    <option disabled selected hidden>-- Select Gender --</option>
+                    <option>M</option>
+                    <option>F</option>
+                </select>
+                <div class="form-one-line">
+                <select class="form-control" name="bYear" required>
+                    <option disabled selected hidden>-- Select Birth Year --</option>
+                    <option>1994</option>
+                    <option>1995</option>
+                    <option>1996</option>
+                    <option>1997</option>
+                    <option>1998</option>
+                    <option>1999</option>
+                    <option>2000</option>
+                    <option>2001</option>
+                </select>
+                <select class="form-control" name="bMonth" required>
+                    <option disabled selected hidden>-- Select Birth Month --</option>
+                    <option>January</option>
+                    <option>February</option>
+                    <option>March</option>
+                    <option>April</option>
+                    <option>May</option>
+                    <option>June</option>
+                    <option>July</option>
+                    <option>August</option>
+                    <option>September</option>
+                    <option>October</option>
+                    <option>November</option>
+                    <option>December</option>
+                </select>
+                <select class="form-control" name="bDate" required>
+                    <option disabled selected hidden>-- Select Birth Date --</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    <option>25</option>
+                    <option>26</option>
+                    <option>27</option>
+                    <option>28</option>
+                    <option>29</option>
+                    <option>30</option>
+                    <option>31</option>
+                </select>
+                </div>
+                <input type="email" placeholder="Email" name="email" class="form-control" required>
+                <input type="integer" placeholder="Phone Number (format:xxx-xxx-xxxx)" name="phone" class="form-control" pattern="^\d{3}-\d{3}-\d{4}" required>
+                <select class="form-control" name="program" required>
+                    <option disabled selected hidden>-- Select Program --</option>
+                    <option>Anthropology</option>
+                    <option>Architecture and Visual Studies</option>
+                    <option>Asian Canadian Studies</option>
+                    <option>Astronomy and Astrophysics</option>
+                    <option>Biochemistry</option>
+                    <option>Biology</option>
+                    <option>Canadian Studies</option>
+                    <option>Cell and System Biology</option>
+                    <option>Chemical Engineering</option>
+                    <option>Chemistry</option>
+                    <option>Civil Engineering</option>
+                    <option>Cognitive Science</option>
+                    <option>Computer Engineering</option>
+                    <option>Computer Science</option>
+                    <option>Criminology and Socialegal Studies</option>
+                    <option>Drama, Theatre, and Performance Studies</option>
+                    <option>Earth Science</option>
+                    <option>East Asian Studies</option>
+                    <option>Economics</option>
+                    <option>Education and Society</option>
+                    <option>Electrical Engineering</option>
+                    <option>Engineering Science</option>
+                    <option>English</option>
+                    <option>French</option>
+                    <option>History</option>
+                    <option>History of Art</option>
+                    <option>Human Biology</option>
+                    <option>Industrial Engineering</option>
+                    <option>International Relations</option>
+                    <option>Life Science</option>
+                    <option>Materials Engineering</option>
+                    <option>Mathematics</option>
+                    <option>Mechanical Engineering</option>
+                    <option>Mineral Engineering</option>
+                    <option>Music</option>
+                    <option>Pharmaceutical Chemistry</option>
+                    <option>Pharmacology and Toxicology</option>
+                    <option>Philosophy</option>
+                    <option>Physics</option>
+                    <option>Political Science</option>
+                    <option>Psychology</option>
+                    <option>Public Health Science</option>
+                    <option>Religion</option>
+                    <option>Rotman Commerce</option>
+                    <option>Sociology</option>
+                    <option>Statistical Science</option>
+                    <option>Urban Studies</option>
+                    <option>Women and Gender Studies</option>
+                    <option>Other</option>
+                </select>
+                <input type="text" placeholder="Please fill if you selected other program above." class="form-control" name="oProgram">
+                <select class="form-control" name="year" required>
+                    <option disabled selected hidden>-- Select Year of Study --</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                </select>
+                <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">
+            </form>
+        </div>
+
  
-       
+    <footer class="footer">
+        <p>&copy; ROCSAUT 2017</p>
+    </footer>
+        
+    </div>
+</body>
  
-{% endblock %}
+</html>
