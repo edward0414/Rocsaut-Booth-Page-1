@@ -34,7 +34,16 @@
             </nav>
             <h3 class="text-muted">ROCSAUT Booth</h3>
             </div>
-
+        
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for message in messages %}
+                  <strong>{{ message }}</strong></p>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+        
             {% if error %}
                 <p class="error"><strong>Error:</strong> {{ error }}</p>
             {% endif %}
@@ -44,12 +53,12 @@
             <form class="form-signin" action="" method="post">
                 <select class="form-control" name="campus" required>
                     <option disabled selected hidden>-- Select Campus --</option>
-                    <option>St. George</option>
-                    <option>Scarborough</option>
-                    <option>Mississaugua</option>
+                    <option>UTSG</option>
+                    <option>UTSC</option>
+                    <option>UTM</option>
                 </select>
-                <input type="number" placeholder="Member Card Number" name="cardNum" class="form-control" required autofocus>
-                <input type="number" placeholder="Student Number" name="stuNum" class="form-control" required>
+                <input type="text" placeholder="Member Card Number" name="cardNum" class="form-control" required autofocus>
+                <input type="text" placeholder="Student Number" name="stuNum" class="form-control" maxlength="10" minlength="9" required>
                 <input type="text" placeholder="First Name" name="fName" class="form-control" required>
                 <input type="text" placeholder="Last Name" name="lName" class="form-control"required>
                 <input type="text" placeholder="Chinese Name (Optional)" name="cName" class="form-control" optional>
@@ -125,7 +134,7 @@
                 <select class="form-control" name="program" required>
                     <option disabled selected hidden>-- Select Program --</option>
                     <option>Anthropology</option>
-                    <option>Architecture and Visual Studies</option>
+                    <option>Architecture</option>
                     <option>Asian Canadian Studies</option>
                     <option>Astronomy and Astrophysics</option>
                     <option>Biochemistry</option>
@@ -138,8 +147,8 @@
                     <option>Cognitive Science</option>
                     <option>Computer Engineering</option>
                     <option>Computer Science</option>
-                    <option>Criminology and Socialegal Studies</option>
-                    <option>Drama, Theatre, and Performance Studies</option>
+                    <option>Criminology</option>
+                    <option>Drama and Performance Studies</option>
                     <option>Earth Science</option>
                     <option>East Asian Studies</option>
                     <option>Economics</option>

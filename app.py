@@ -59,7 +59,7 @@ def welcome():
         flash("You have no database")
 
     username = "admin"
-    return render_template('welcome.html', user=username, orders=orders, members=members)
+    return render_template('welcome.html', user=user, orders=orders, members=members)
 
 
 @app.route('/addTranscation', methods=['GET', 'POST'])
@@ -131,35 +131,40 @@ def signupMember():
                 program = oprogram
             year = request.form['year']
 
-            print('a')
             conn = mysql.connect()
             cursor = conn.cursor()
-            print('b')
 
-            # figure out the database in MySQL and insert to it
-            # (cardNum,stuNum,fName,lName,cName,phone,email,gender,birth,campus,year,program,7xNuLL)
-            query = "INSERT INTO member VALUES ({0},'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}',{12},'{13}', {14}, {15}, {16}, {17}, {18}, {19}, {20});".format(cardnum,stunum,fname,lname,cname,phone,email,gender,byear,bmonth,bdate,campus,year,program,'NULL','NULL','NULL','NULL','NULL','NULL','NULL')
-            # query = "INSERT INTO member VALUES (998, NULL, 'Eric', 'Feng', 'NULL', '647-996-2797', 'ericyfeng@hotmail.com', 'M', NULL, NULL, NULL, 'UTSG', 4, 'Comp Sci', NULL, NULL, NULL, NULL, NULL, NULL, NULL);"
-            print(query)
-            # print("INSERT INTO member VALUES (997, NULL, 'Eric', 'Feng', NULL, '647-996-2797', 'ericyfeng@hotmail.com', 'M', NULL, NULL, NULL, 'UTSG', 4, 'Comp Sci', NULL, NULL, NULL, NULL, NULL, NULL, NULL);")
-            print('c')
-            cursor.execute(query)
-            print('d')
-            # data = cursor.fecthone()
-            # print(data)
-            # print('e')
+            
+            cursor.execute("SELECT * FROM member WHERE memberID={}".format(cardnum))
+            result1 = cursor.fetchone()
+            cursor.execute("SELECT * FROM member WHERE studentID='{}'".format(stunum))
+            result2 = cursor.fetchone()
 
-            #prevent user from submitting duplicate data?
+            if result1 is not None:
+            # prevent the user from entering the same member card number
+                error= "The member card number entered is already in the system. Please use a different one."
+                conn.close()
+                raise Exception(error)
 
-            conn.commit()
-            conn.close()
-            print('f')
-            error = "Sign up successfully!"
+            elif result2 is not None:
+            # prevent the user from entering the same student number
+                error= "The student number entered is already in the system. You are already a member."
+                conn.close()
+                raise Exception(error)
 
-        except:
-            conn.rollback()
+            else:
+                # (cardNum,stuNum,fName,lName,cName,phone,email,gender,birth,campus,year,program,7xNuLL)
+                query = "INSERT INTO member VALUES ({0},'{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}',{12},'{13}', {14}, {15}, {16}, {17}, {18}, {19}, {20});".format(cardnum,stunum,fname,lname,cname,phone,email,gender,byear,bmonth,bdate,campus,year,program,'NULL','NULL','NULL','NULL','NULL','NULL','NULL')
+                cursor.execute(query)
+
+                conn.commit()
+                conn.close()
+                flash("Sign up successfully!")
+                return redirect(url_for('signupMember'))
+
+        except Exception as e:
             print('fail')
-            error = "Fail to sign up."
+            error = "Fail to sign up. " + str(e.args[0])
 
     return render_template('signupMember.html', error=error)
 
@@ -200,7 +205,9 @@ def login():
     error = None
     if request.method == 'POST':
         try:
+            global user
             username = request.form['username']
+            user = username
 
             #extract the password from the database
             g.db = sqlite3.connect(database)
