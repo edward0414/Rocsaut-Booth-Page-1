@@ -38,26 +38,25 @@
             {% with messages = get_flashed_messages() %}
               {% if messages %}
                 {% for message in messages %}
-                  <strong>{{ message }}</strong></p>
+                  <strong>{{ message }}</strong>
                 {% endfor %}
-                </ul>
               {% endif %}
             {% endwith %}
         
             {% if error %}
-                <p class="error"><strong>Error:</strong> {{ error }}</p>
+                <p style="color:red;"><strong>Error:</strong> {{ error }}</p>
             {% endif %}
 
             <div class="jumbotron">
             <h1>ROCSAUT Member Sign Up</h1>
             <form class="form-signin" action="" method="post">
+                <input type="text" placeholder="Member Card Number (STAFF ONLY)" name="cardNum" class="form-control" required autofocus>
                 <select class="form-control" name="campus" required>
                     <option disabled selected hidden>-- Select Campus --</option>
                     <option>UTSG</option>
                     <option>UTSC</option>
                     <option>UTM</option>
                 </select>
-                <input type="text" placeholder="Member Card Number" name="cardNum" class="form-control" required autofocus>
                 <input type="text" placeholder="Student Number" name="stuNum" class="form-control" maxlength="10" minlength="9" required>
                 <input type="text" placeholder="First Name" name="fName" class="form-control" required>
                 <input type="text" placeholder="Last Name" name="lName" class="form-control"required>
@@ -70,6 +69,9 @@
                 <div class="form-one-line">
                 <select class="form-control" name="bYear" required>
                     <option disabled selected hidden>-- Select Birth Year --</option>
+                    <option>1991</option>
+                    <option>1992</option>
+                    <option>1993</option>
                     <option>1994</option>
                     <option>1995</option>
                     <option>1996</option>
@@ -130,7 +132,7 @@
                 </select>
                 </div>
                 <input type="email" placeholder="Email" name="email" class="form-control" required>
-                <input type="integer" placeholder="Phone Number (format:xxx-xxx-xxxx)" name="phone" class="form-control" pattern="^\d{3}-\d{3}-\d{4}" required>
+                <input type="tel" placeholder="Phone Number" name="phone" class="form-control" pattern="[0-9]{10}" required>
                 <select class="form-control" name="program" required>
                     <option disabled selected hidden>-- Select Program --</option>
                     <option>Anthropology</option>
