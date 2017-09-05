@@ -23,7 +23,7 @@ function validatelName(){
 
 
 function validateEmail(){
-    var re = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$//;
+    var re = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
     if(re.test(document.getElementById("email").value)){
         document.getElementById("email").style.background ='#ccffcc';
         return true;
