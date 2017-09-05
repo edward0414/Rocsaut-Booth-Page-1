@@ -134,6 +134,7 @@ def signupMember():
             conn = mysql.connect()
             cursor = conn.cursor()
 
+            months = ["February","April","June","September","November"]
             
             cursor.execute("SELECT * FROM member WHERE memberID={}".format(cardnum))
             result1 = cursor.fetchone()
@@ -149,6 +150,16 @@ def signupMember():
             elif result2 is not None:
             # prevent the user from entering the same student number
                 error= "The student number entered is already in the system. You are already a member."
+                conn.close()
+                raise Exception(error)
+
+            elif ((bmonth in months) and (bdate == "31")) or ((bmonth == "February") and (bdate == "30")):
+                error= "Incorrect birthdate was entered. There is no " + bdate + "th in " + bmonth + "."
+                conn.close()
+                raise Exception(error)
+
+            elif (int(byear) % 4 != 0) and (bmonth == "February") and (bdate == "29"):
+                error= "Incorrect birthdate was entered. No Feb 29th on non-leap yaer."
                 conn.close()
                 raise Exception(error)
 

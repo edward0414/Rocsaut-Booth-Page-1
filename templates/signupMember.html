@@ -10,6 +10,8 @@
     <link href="{{ url_for('static', filename = 'jumbotron-narrow.css') }}" rel="stylesheet">
     
     <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+    
+    <script type="text/javascript" src="{{ url_for('static', filename = 'signupMember.js') }}"></script>
  
     <style>
         .form-one-line {
@@ -49,7 +51,7 @@
 
             <div class="jumbotron">
             <h1>ROCSAUT Member Sign Up</h1>
-            <form class="form-signin" action="" method="post">
+            <form name="member" class="form-signin" action="" method="post">
                 <input type="text" placeholder="Member Card Number (STAFF ONLY)" name="cardNum" class="form-control" required autofocus>
                 <select class="form-control" name="campus" required>
                     <option disabled selected hidden>-- Select Campus --</option>
@@ -58,8 +60,8 @@
                     <option>UTM</option>
                 </select>
                 <input type="text" placeholder="Student Number" name="stuNum" class="form-control" maxlength="10" minlength="9" required>
-                <input type="text" placeholder="First Name" name="fName" class="form-control" required>
-                <input type="text" placeholder="Last Name" name="lName" class="form-control"required>
+                <input id="fname" type="text" placeholder="First Name" name="fName" class="form-control" onblur="validatefName()" required>
+                <input id="lname" type="text" placeholder="Last Name" name="lName" class="form-control" onblur="validatelName()" required>
                 <input type="text" placeholder="Chinese Name (Optional)" name="cName" class="form-control" optional>
                 <select class="form-control" name="gender" required>
                     <option disabled selected hidden>-- Select Gender --</option>
@@ -131,8 +133,8 @@
                     <option>31</option>
                 </select>
                 </div>
-                <input type="email" placeholder="Email" name="email" class="form-control" required>
-                <input type="tel" placeholder="Phone Number" name="phone" class="form-control" pattern="[0-9]{10}" required>
+                <input id="email" type="email" placeholder="Email" name="email" class="form-control" onblurr="validateEmail()" required>
+                <input id="phone" type="tel" placeholder="Phone Number" name="phone" class="form-control" pattern="[0-9]{10}" onblurr="validatePhone()" required>
                 <select class="form-control" name="program" required>
                     <option disabled selected hidden>-- Select Program --</option>
                     <option>Anthropology</option>
